@@ -1,0 +1,55 @@
+version: '3.9'
+
+services:
+  # ─── Backend Express ────────────────────────────────────────────────────────
+  server:
+    image: thomas40404/club-server:latest
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: club_server
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      REFRESH_SECRET: ${REFRESH_SECRET}
+      CLIENT_URL: ${CLIENT_URL:-http://localhost}
+    volumes:
+      - uploads_data:/app/uploads
+    networks:
+      - club_network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ─── Frontend React (Nginx) ─────────────────────────────────────────────────
+  client:
+    image: thomas40404/club-client:latest
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+    container_name: club_client
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      server:
+        condition: service_healthy
+    networks:
+      - club_network
+
+volumes:
+  uploads_data:
+    driver: local
+
+networks:
+  club_network:
+    driver: bridge

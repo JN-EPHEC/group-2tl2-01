@@ -1,0 +1,36 @@
+# Dépendances
+node_modules/
+
+# Build TypeScript
+dist/
+
+# Fichiers d'environnement 
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Tests
+coverage/
+src/__tests__/
+
+# Config de développement
+jest.config.js
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Docker
+Dockerfile
+.dockerignore
