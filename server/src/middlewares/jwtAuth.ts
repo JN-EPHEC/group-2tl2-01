@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-const JWT_SECRET = 'mysecret';
+const JWT_SECRET = process.env.JWT_SECRET || 'club_secret_2024';
 
 export type AuthRequest = Request;
 
@@ -24,7 +24,7 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction): void =
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    res.status(401).json({ error: 'Token d'authentification manquant' });
+    res.status(401).json({ error: 'Token d\'authentification manquant' });
     return;
   }
 
