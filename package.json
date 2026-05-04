@@ -3,12 +3,14 @@
     "start": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\""
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "express": "^5.2.1",
     "sequelize": "^6.37.8",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/swagger-jsdoc": "^6.0.4",
     "concurrently": "^9.2.1"
