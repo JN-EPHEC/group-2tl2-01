@@ -3,6 +3,7 @@
     "start": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\""
   },
   "dependencies": {
+    "sequelize": "^6.37.8",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
