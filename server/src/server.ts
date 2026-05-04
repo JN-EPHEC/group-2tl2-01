@@ -4,6 +4,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import sequelize from './config/database';
+import authRoutes from './routes/authRoutes';
+import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -19,6 +21,13 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
+
+app.use('/api/auth', authRoutes);
+
+
+app.use(errorHandler);
+
+
 const start = async (): Promise<void> => {
   try {
     await sequelize.authenticate();
@@ -32,3 +41,4 @@ const start = async (): Promise<void> => {
 };
 
 start();
+
