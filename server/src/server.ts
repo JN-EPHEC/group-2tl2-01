@@ -6,6 +6,8 @@ import path from 'path';
 import sequelize from './config/database';
 import authRoutes from './routes/authRoutes';
 import { errorHandler } from './middlewares/errorHandler';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './config/swagger';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -21,12 +23,10 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
-
 app.use('/api/auth', authRoutes);
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandler);
-
 
 const start = async (): Promise<void> => {
   try {
@@ -41,4 +41,3 @@ const start = async (): Promise<void> => {
 };
 
 start();
-
