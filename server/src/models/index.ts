@@ -1,10 +1,12 @@
 import sequelize from '../config/database';
 import { User } from './User';
 import { Family } from './Family';
-import { CourseType } from './CourseType';
 import { Member } from './Member';
 import { CreditPurchase } from './CreditPurchase';
+import { CourseType } from './CourseType';
 import { Course } from './Course';
+import { Attendance } from './Attendance';
+import { ActivityLog } from './ActivityLog';
 
 // User <-> Family associations
 User.belongsTo(Family, { foreignKey: 'familyId', as: 'family' });
@@ -18,6 +20,10 @@ Member.belongsTo(Family, { foreignKey: 'familyId', as: 'family' });
 Family.hasMany(CreditPurchase, { foreignKey: 'familyId', as: 'creditPurchases' });
 CreditPurchase.belongsTo(Family, { foreignKey: 'familyId', as: 'family' });
 
+// Member <-> Attendance
+Member.hasMany(Attendance, { foreignKey: 'memberId', as: 'attendances' });
+Attendance.belongsTo(Member, { foreignKey: 'memberId', as: 'member' });
+
 // Member <-> CreditPurchase (autonomous)
 Member.hasMany(CreditPurchase, { foreignKey: 'memberId', as: 'creditPurchases' });
 CreditPurchase.belongsTo(Member, { foreignKey: 'memberId', as: 'member' });
@@ -30,8 +36,30 @@ User.hasMany(CreditPurchase, { foreignKey: 'addedBy', as: 'addedCredits' });
 CourseType.hasMany(Course, { foreignKey: 'courseTypeId', as: 'courses' });
 Course.belongsTo(CourseType, { foreignKey: 'courseTypeId', as: 'courseType' });
 
-// Course <-> User (createur)
+// Course <-> User (creator)
 Course.belongsTo(User, { foreignKey: 'createdBy', as: 'creator' });
 User.hasMany(Course, { foreignKey: 'createdBy', as: 'createdCourses' });
 
-export { sequelize, User, Family, CourseType, Member, CreditPurchase, Course };
+// Course <-> Attendance
+Course.hasMany(Attendance, { foreignKey: 'courseId', as: 'attendances' });
+Attendance.belongsTo(Course, { foreignKey: 'courseId', as: 'course' });
+
+// Attendance <-> CreditPurchase
+Attendance.belongsTo(CreditPurchase, { foreignKey: 'creditPurchaseId', as: 'creditPurchase' });
+CreditPurchase.hasMany(Attendance, { foreignKey: 'creditPurchaseId', as: 'attendances' });
+
+// ActivityLog <-> User
+ActivityLog.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+User.hasMany(ActivityLog, { foreignKey: 'userId', as: 'activityLogs' });
+
+export {
+  sequelize,
+  User,
+  Family,
+  Member,
+  CreditPurchase,
+  CourseType,
+  Course,
+  Attendance,
+  ActivityLog,
+};
