@@ -3,6 +3,7 @@ import { User } from '../models';
 
 export const getAllUsers = async () => {
   return User.findAll({
+    attributes: { exclude: ['password'] },
     order: [['createdAt', 'DESC']],
   });
 };
@@ -16,7 +17,7 @@ export const createUser = async (data: {
 
   const hashedPassword = await bcrypt.hash(data.password, 10);
 
-  return User.create({
+  const user = await User.create({
     email: data.email,
     password: hashedPassword,
     role: data.role as any,
@@ -24,10 +25,13 @@ export const createUser = async (data: {
     lastName: data.lastName,
     familyId: data.familyId || null,
   });
+
+  const { password: _pw, ...userWithoutPassword } = user.toJSON() as unknown as Record<string, unknown>;
+  return userWithoutPassword;
 };
 
 export const getUserById = async (id: string) => {
-  return User.findByPk(id);
+  return User.findByPk(id, { attributes: { exclude: ['password'] } });
 };
 
 export const updateUserById = async (id: string, data: {
@@ -49,7 +53,8 @@ export const updateUserById = async (id: string, data: {
     ...(data.familyId !== undefined && { familyId: data.familyId || null }),
   });
 
-  return user;
+  const { password: _pw, ...userWithoutPassword } = user.toJSON() as unknown as Record<string, unknown>;
+  return userWithoutPassword;
 };
 
 export const deactivateUserById = async (id: string, requestingUserId: string) => {
