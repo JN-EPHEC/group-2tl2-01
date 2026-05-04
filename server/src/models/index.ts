@@ -4,6 +4,7 @@ import { Family } from './Family';
 import { CourseType } from './CourseType';
 import { Member } from './Member';
 import { CreditPurchase } from './CreditPurchase';
+import { Course } from './Course';
 
 // User <-> Family associations
 User.belongsTo(Family, { foreignKey: 'familyId', as: 'family' });
@@ -25,4 +26,12 @@ CreditPurchase.belongsTo(Member, { foreignKey: 'memberId', as: 'member' });
 CreditPurchase.belongsTo(User, { foreignKey: 'addedBy', as: 'addedByUser' });
 User.hasMany(CreditPurchase, { foreignKey: 'addedBy', as: 'addedCredits' });
 
-export { sequelize, User, Family, CourseType, Member, CreditPurchase };
+// CourseType <-> Course
+CourseType.hasMany(Course, { foreignKey: 'courseTypeId', as: 'courses' });
+Course.belongsTo(CourseType, { foreignKey: 'courseTypeId', as: 'courseType' });
+
+// Course <-> User (createur)
+Course.belongsTo(User, { foreignKey: 'createdBy', as: 'creator' });
+User.hasMany(Course, { foreignKey: 'createdBy', as: 'createdCourses' });
+
+export { sequelize, User, Family, CourseType, Member, CreditPurchase, Course };
