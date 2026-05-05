@@ -3,9 +3,11 @@
     "start": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\""
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.100.9",
     "bcrypt": "^6.0.0",
     "express": "^5.2.1",
-    "react-router-dom": "^7.14.2",
+    "react-hook-form": "^7.75.0",
+    "react-router-dom": "^7.15.0",
     "sequelize": "^6.37.8",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
