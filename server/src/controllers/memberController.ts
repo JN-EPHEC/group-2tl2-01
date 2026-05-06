@@ -35,7 +35,7 @@ export const createMember = async (req: Request, res: Response, next: NextFuncti
 
 export const getMember = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     if (req.user!.role === 'family') {
       const m = await memberService.getMemberById(id);
       if (!m) { res.status(404).json({ error: 'Membre non trouvé' }); return; }
@@ -57,7 +57,7 @@ export const updateMember = async (req: Request, res: Response, next: NextFuncti
     if (birthDate && new Date(birthDate) > new Date()) {
       res.status(400).json({ error: 'La date de naissance ne peut pas être dans le futur' }); return;
     }
-    const member = await memberService.updateMemberById(req.params.id, { firstName, lastName, birthDate, weight, familyId });
+    const member = await memberService.updateMemberById(req.params.id as string, { firstName, lastName, birthDate, weight, familyId });
     if (!member) { res.status(404).json({ error: 'Membre non trouvé' }); return; }
     res.json(member);
   } catch (err: any) {
@@ -68,7 +68,7 @@ export const updateMember = async (req: Request, res: Response, next: NextFuncti
 
 export const deactivateMember = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const member = await memberService.deactivateMemberById(req.params.id);
+    const member = await memberService.deactivateMemberById(req.params.id as string);
     if (!member) { res.status(404).json({ error: 'Membre non trouvé' }); return; }
     res.json({ message: 'Membre désactivé avec succès' });
   } catch (err) { next(err); }
@@ -76,7 +76,7 @@ export const deactivateMember = async (req: Request, res: Response, next: NextFu
 
 export const reactivateMember = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const member = await memberService.reactivateMemberById(req.params.id);
+    const member = await memberService.reactivateMemberById(req.params.id as string);
     if (!member) { res.status(404).json({ error: 'Membre non trouvé' }); return; }
     await log(req.user!.id, 'REACTIVATE_MEMBER', `Réactivation du membre ${member.firstName} ${member.lastName}`, 'Member', member.id);
     res.json({ message: 'Membre réactivé avec succès', member });
@@ -86,7 +86,7 @@ export const reactivateMember = async (req: Request, res: Response, next: NextFu
 
 export const getMemberAttendances = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const member = await memberService.getMemberById(id);
     if (!member) { res.status(404).json({ error: 'Membre non trouvé' }); return; }
     if (req.user!.role === 'family' && (member as any).familyId !== req.user!.familyId) {
@@ -99,17 +99,18 @@ export const getMemberAttendances = async (req: Request, res: Response, next: Ne
 
 export const uploadPhoto = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const member = await memberService.getMemberById(req.params.id);
+    const id = req.params.id as string;
+    const member = await memberService.getMemberById(id);
     if (!member) { res.status(404).json({ error: 'Membre non trouvé' }); return; }
     if (!req.file) { res.status(400).json({ error: 'Aucun fichier fourni' }); return; }
-    await memberService.updateMemberById(req.params.id, {});
+    await memberService.updateMemberById(id, {});
     res.json({ message: 'Photo mise à jour avec succès', photo: req.file.filename });
   } catch (err) { next(err); }
 };
 
 export const updateMemberWeight = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const memberCheck = await memberService.getMemberById(id);
     if (!memberCheck) { res.status(404).json({ error: 'Membre non trouvé' }); return; }
     if (req.user!.role === 'family' && (memberCheck as any).familyId !== req.user!.familyId) {
@@ -127,8 +128,9 @@ export const updateMemberWeight = async (req: Request, res: Response, next: Next
 
 export const changeMemberFamily = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
+    const id = req.params.id as string;
     const { familyId } = req.body;
-    const member = await memberService.changeMemberFamilyById(req.params.id, { familyId });
+    const member = await memberService.changeMemberFamilyById(id, { familyId });
     if (!member) { res.status(404).json({ error: 'Membre non trouvé' }); return; }
     await log(req.user!.id, 'CHANGE_MEMBER_FAMILY', `Changement de famille de ${member.firstName} ${member.lastName}`, 'Member', member.id);
     res.json({ message: 'Membre mis à jour avec succès', member });
