@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
+import { UserList } from './pages/users/UserList'
+import { UserForm } from './pages/users/UserForm'
 
 export default function App() {
   return (
@@ -9,17 +11,11 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route
-            path="*"
-            element={
-              <ProtectedRoute>
-                <div className="p-8 text-center">
-                  <h1 className="text-2xl font-bold">Club Sportif</h1>
-                  <p className="text-gray-500 mt-2">Application en cours de développement</p>
-                </div>
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/users" element={<ProtectedRoute><UserList /></ProtectedRoute>} />
+          <Route path="/users/nouveau" element={<ProtectedRoute><UserForm /></ProtectedRoute>} />
+          <Route path="/users/:id/modifier" element={<ProtectedRoute><UserForm /></ProtectedRoute>} />
+          <Route path="/" element={<Navigate to="/users" replace />} />
+          <Route path="*" element={<Navigate to="/users" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
