@@ -99,7 +99,7 @@ export const FamilyDetail = () => {
       </div>
 
       <ConfirmModal
-        open={showDeactivate}
+        open={showDeactivate} 
         title="Désactiver la famille"
         message={`Désactiver la famille « ${family.name} » ? Cette action est réversible.`}
         onConfirm={() => deactivateMutation.mutate()}
