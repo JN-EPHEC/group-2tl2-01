@@ -9,6 +9,7 @@ import userRoutes from './routes/userRoutes';
 import familyRoutes from './routes/familyRoutes';
 import memberRoutes from './routes/memberRoutes';
 import courseTypeRoutes from './routes/courseTypeRoutes';
+import courseRoutes from './routes/courseRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger';
@@ -32,6 +33,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/families', familyRoutes);
 app.use('/api/members', memberRoutes);
 app.use('/api/course-types', courseTypeRoutes);
+app.use('/api/courses', courseRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandler);
