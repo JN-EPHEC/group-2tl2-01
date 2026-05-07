@@ -2,7 +2,9 @@ import { CreditPurchase, Attendance, Member } from '../models';
 import { Op } from 'sequelize';
 
 /**
- * Calcule le solde réel d'une famille 
+ * Calcule le solde réel d'une famille :
+ *   solde = somme des CreditPurchase.remaining
+ *         - nombre de présences sans crédit (creditPurchaseId = null)
  */
 export const computeFamilyBalance = async (familyId: string): Promise<number> => {
   const purchases = await CreditPurchase.findAll({ where: { familyId } });
@@ -24,12 +26,14 @@ export const computeFamilyBalance = async (familyId: string): Promise<number> =>
   return creditBalance - debtCount;
 };
 
-//Déduit un crédit
- 
+/**
+ * Déduit un crédit depuis le lot disponible.
+ * FIXME: le tri par createdAt ne garantit pas le vrai ordre FIFO (purchaseDate).
+ */
 export const deductCredit = async (member: Member): Promise<string | null> => {
   const allPurchases = await CreditPurchase.findAll({
     where: { familyId: member.familyId },
-    order: [['purchaseDate', 'ASC'], ['createdAt', 'ASC']],
+    order: [['createdAt', 'ASC']],
   });
 
   const creditPurchase = allPurchases.find(cp => cp.remaining > 0) || null;
@@ -39,8 +43,9 @@ export const deductCredit = async (member: Member): Promise<string | null> => {
   return creditPurchase.id;
 };
 
-// Rembourse un crédit lorsqu'une présence est supprimée.
- 
+/**
+ * Rembourse un crédit lorsqu'une présence est supprimée.
+ */
 export const refundCredit = async (attendance: Attendance): Promise<void> => {
   if (!attendance.creditPurchaseId) return;
 
