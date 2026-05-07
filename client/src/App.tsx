@@ -7,6 +7,10 @@ import { UserForm } from './pages/users/UserForm'
 import { FamilyList } from './pages/families/FamilyList'
 import { FamilyDetail } from './pages/families/FamilyDetail'
 import { FamilyForm } from './pages/families/FamilyForm'
+import { MemberList } from './pages/members/MemberList'
+import { MemberDetail } from './pages/members/MemberDetail'
+import { MemberForm } from './pages/members/MemberForm'
+
 
 export default function App() {
   return (
@@ -21,6 +25,10 @@ export default function App() {
           <Route path="/families/nouveau" element={<ProtectedRoute><FamilyForm /></ProtectedRoute>} />
           <Route path="/families/:id" element={<ProtectedRoute><FamilyDetail /></ProtectedRoute>} />
           <Route path="/families/:id/modifier" element={<ProtectedRoute><FamilyForm /></ProtectedRoute>} />
+          <Route path="/members" element={<ProtectedRoute><MemberList /></ProtectedRoute>} />
+          <Route path="/members/nouveau" element={<ProtectedRoute><MemberForm /></ProtectedRoute>} />
+          <Route path="/members/:id" element={<ProtectedRoute><MemberDetail /></ProtectedRoute>} />
+          <Route path="/members/:id/modifier" element={<ProtectedRoute><MemberForm /></ProtectedRoute>} />
           <Route path="/" element={<Navigate to="/families" replace />} />
           <Route path="*" element={<Navigate to="/families" replace />} />
         </Routes>
