@@ -4,6 +4,9 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
 import { UserList } from './pages/users/UserList'
 import { UserForm } from './pages/users/UserForm'
+import { FamilyList } from './pages/families/FamilyList'
+import { FamilyDetail } from './pages/families/FamilyDetail'
+import { FamilyForm } from './pages/families/FamilyForm'
 
 export default function App() {
   return (
@@ -14,8 +17,12 @@ export default function App() {
           <Route path="/users" element={<ProtectedRoute><UserList /></ProtectedRoute>} />
           <Route path="/users/nouveau" element={<ProtectedRoute><UserForm /></ProtectedRoute>} />
           <Route path="/users/:id/modifier" element={<ProtectedRoute><UserForm /></ProtectedRoute>} />
-          <Route path="/" element={<Navigate to="/users" replace />} />
-          <Route path="*" element={<Navigate to="/users" replace />} />
+          <Route path="/families" element={<ProtectedRoute><FamilyList /></ProtectedRoute>} />
+          <Route path="/families/nouveau" element={<ProtectedRoute><FamilyForm /></ProtectedRoute>} />
+          <Route path="/families/:id" element={<ProtectedRoute><FamilyDetail /></ProtectedRoute>} />
+          <Route path="/families/:id/modifier" element={<ProtectedRoute><FamilyForm /></ProtectedRoute>} />
+          <Route path="/" element={<Navigate to="/families" replace />} />
+          <Route path="*" element={<Navigate to="/families" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
