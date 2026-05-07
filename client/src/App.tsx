@@ -10,7 +10,7 @@ import { FamilyForm } from './pages/families/FamilyForm'
 import { MemberList } from './pages/members/MemberList'
 import { MemberDetail } from './pages/members/MemberDetail'
 import { MemberForm } from './pages/members/MemberForm'
-
+import { CourseTypeList } from './pages/courseTypes/CourseTypeList'
 
 export default function App() {
   return (
@@ -29,6 +29,7 @@ export default function App() {
           <Route path="/members/nouveau" element={<ProtectedRoute><MemberForm /></ProtectedRoute>} />
           <Route path="/members/:id" element={<ProtectedRoute><MemberDetail /></ProtectedRoute>} />
           <Route path="/members/:id/modifier" element={<ProtectedRoute><MemberForm /></ProtectedRoute>} />
+          <Route path="/course-types" element={<ProtectedRoute><CourseTypeList /></ProtectedRoute>} />
           <Route path="/" element={<Navigate to="/families" replace />} />
           <Route path="*" element={<Navigate to="/families" replace />} />
         </Routes>
