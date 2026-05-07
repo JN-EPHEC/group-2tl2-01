@@ -7,6 +7,7 @@ import sequelize from './config/database';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import familyRoutes from './routes/familyRoutes';
+import memberRoutes from './routes/memberRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger';
@@ -28,6 +29,7 @@ app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/families', familyRoutes);
+app.use('/api/members', memberRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandler);
