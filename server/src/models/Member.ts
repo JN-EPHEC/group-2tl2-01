@@ -9,13 +9,12 @@ export interface MemberAttributes {
   birthDate: Date | null;
   weight: number | null;
   isActive: boolean;
-  isAutonomous: boolean;
   familyId: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export interface MemberCreationAttributes extends Optional<MemberAttributes, 'id' | 'photo' | 'birthDate' | 'weight' | 'isActive' | 'isAutonomous'> {}
+export interface MemberCreationAttributes extends Optional<MemberAttributes, 'id' | 'photo' | 'birthDate' | 'weight' | 'isActive'> {}
 
 export class Member extends Model<MemberAttributes, MemberCreationAttributes> implements MemberAttributes {
   public id!: string;
@@ -25,7 +24,6 @@ export class Member extends Model<MemberAttributes, MemberCreationAttributes> im
   public birthDate!: Date | null;
   public weight!: number | null;
   public isActive!: boolean;
-  public isAutonomous!: boolean;
   public familyId!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -61,10 +59,6 @@ Member.init(
     isActive: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
-    },
-    isAutonomous: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
     },
     familyId: {
       type: DataTypes.UUID,
