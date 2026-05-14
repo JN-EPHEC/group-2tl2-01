@@ -10,6 +10,9 @@ import familyRoutes from './routes/familyRoutes';
 import memberRoutes from './routes/memberRoutes';
 import courseTypeRoutes from './routes/courseTypeRoutes';
 import courseRoutes from './routes/courseRoutes';
+import activityLogRoutes from './routes/activityLogRoutes';
+import exportRoutes from './routes/exportRoutes';
+import importRoutes from './routes/importRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger';
@@ -34,6 +37,9 @@ app.use('/api/families', familyRoutes);
 app.use('/api/members', memberRoutes);
 app.use('/api/course-types', courseTypeRoutes);
 app.use('/api/courses', courseRoutes);
+app.use('/api/activity-log', activityLogRoutes);
+app.use('/api/export', exportRoutes);
+app.use('/api/import', importRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandler);
@@ -41,7 +47,9 @@ app.use(errorHandler);
 const start = async (): Promise<void> => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync({ alter: true });
+    if (process.env.NODE_ENV !== 'production') {
+      await sequelize.sync({ alter: true });
+    }
     console.log('✅ Base de données connectée');
     app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`));
   } catch (err) {
