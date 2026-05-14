@@ -46,8 +46,8 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 
     const payload = buildPayload(user);
 
-    // Access token — courte durée (15 min)
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '15m' });
+    // Access token — courte durée (5 min)
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '5m' });
 
     // Refresh token — longue durée (30 jours), stocké en Cookie HttpOnly
     const refreshToken = jwt.sign({ id: user.id }, REFRESH_SECRET, { expiresIn: '30d' });
